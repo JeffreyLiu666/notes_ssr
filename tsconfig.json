@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "dist",
+    "sourceMap": true,
+    "target": "esnext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "strict": true,
+    // 生成相应的 .d.ts文件
+    "declaration": true,
+    // 不可有未使用引入
+    "noUnusedLocals": true,
+    // 是否启用ES装饰器
+    "experimentalDecorators": true,
+    // 给源码里的装饰器声明加上设计类型元数据
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "removeComments": false,
+    // 在表达式和声明上有隐含的any类型时报错
+    "noImplicitAny": true,
+    // 是否不输出文件
+    "noEmit": true,
+    "checkJs": false,
+    "jsx": "preserve",
+    "lib": ["esnext", "dom"],
+    "typeRoots": [
+      "node_modules/@types",
+      "typings"
+    ],
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "files": [
+    "src/views/build/client.conf.js"
+  ],
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

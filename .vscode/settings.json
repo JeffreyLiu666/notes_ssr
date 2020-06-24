@@ -1,0 +1,87 @@
+{
+    "files.autoSave": "off",
+    "vetur.format.options.tabSize": 4,
+    "vetur.validation.script": false,
+    "fileheader.customMade": {
+        "Date": "date",
+        "Author": "junfeng.liu",
+        "LastEditTime": "date",
+        "LastEditors": "junfeng.liu",
+        "Description": "des"
+    },
+    "fileheader.configObj": {
+        "autoAdd": false,
+    },
+    "cSpell.userWords": [
+        "Datetime",
+        "Enca",
+        "Sider",
+        "Vant",
+        "Zhou",
+        "antd",
+        "antv",
+        "bodyparser",
+        "browserslist",
+        "btns",
+        "chunkhash",
+        "devtool",
+        "esnext",
+        "happypack",
+        "iview",
+        "junfeng",
+        "lform",
+        "portfinder",
+        "prepend",
+        "submenu",
+        "unixtimestamp",
+        "uploader",
+        "vuecli",
+        "vuex"
+    ],
+    "search.followSymlinks": false,
+    "terminal.integrated.shell.windows": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "terminal.integrated.fontFamily": "Consolas",
+    "diffEditor.renderSideBySide": true,
+    "backgroundCover.imagePath": "c:\\Users\\l\\Downloads\\timg (3).jpg",
+    "backgroundCover.opacity": 0.2,
+    "path-intellisense.mappings": {
+        "@": "${workspaceRoot}/src",
+        "root": "${workspaceRoot}"
+    },
+    "todohighlight.isEnable": true,
+    "eslint.run": "onSave",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 4,
+    "prettier.printWidth": 120,
+    "prettier.semi": false,
+    "prettier.bracketSpacing": true,
+    "prettier.useTabs": false,
+    "prettier.arrowParens": "always",
+    "prettier.trailingComma": "none",
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "todohighlight.exclude": [
+        "**/node_modules/**",
+        "**/bower_components/**",
+        "**/dist/**",
+        "**/build/**",
+        "**/.vscode/**",
+        "**/.github/**",
+        "**/_output/**",
+        "**/*.min.*",
+        "**/*.map",
+        "**/.next/**"
+    ],
+    "todohighlight.include": [
+        "**/*.js",
+        "**/*.jsx",
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.html",
+        "**/*.vue",
+        "**/*.css",
+        "**/*.less"
+    ]
+}
