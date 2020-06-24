@@ -1,18 +1,18 @@
 /*
  * @Date: 2020-06-12 14:51:00
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-23 16:51:03
+ * @LastEditTime: 2020-06-24 17:27:39
  * @LastEditors: junfeng.liu
  * @Description: des
  */
 import Koa from 'koa'
 import KoaBodyParser from 'koa-bodyparser'
 import KoaStatic from 'koa-static'
-// import KoaJwt from 'koa-jwt'
+import KoaJwt from 'koa-jwt'
 import path from 'path'
 import Log, { Level } from './lib/log'
 import router from '@/routes'
-// import config from './config/server'
+import config from './config/server'
 import { Result, CustomError, ResultError } from './lib/result'
 import { ResultCode } from './constant'
 import initDev from './views/build/dev.js'
@@ -74,9 +74,15 @@ export default async function createApp (): Promise<Koa> {
     })
 
     // jwt校验
-    // app.use(KoaJwt({ secret: config.jwtSecret }).unless({
-    //     path: [/\/Login$/, /\/Public/]
-    // }))
+    app.use(KoaJwt({ secret: config.jwtSecret }).unless({
+        // path: [/\/Login$/, /\/Public/]
+        custom (ctx): boolean {
+            const regs = [/\/Login$/, /\/Public/]
+            const url = ctx.url
+            if (whiteUrls.includes(url)) return true
+            return regs.some((reg) => reg.test(url))
+        }
+    }))
 
     // 解析post请求
     app.use(KoaBodyParser())

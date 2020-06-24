@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-18 17:30:31
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-22 16:17:35
+ * @LastEditTime: 2020-06-24 17:29:20
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -30,7 +30,7 @@ export default {
         },
         logout ({ commit }) {
             setCookieParams('token', null)
-            location.href = '/Public/login.html'
+            location.href = '/Public/Login'
         }
     }
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-16 14:20:23
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-24 16:55:42
+ * @LastEditTime: 2020-06-24 17:48:51
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -45,6 +45,7 @@ export default class DbHelper {
                     reject(err)
                     return
                 }
+                connection.end()
                 resolve(results)
             })
         })
@@ -77,6 +78,7 @@ export default class DbHelper {
                     reject(err)
                     return
                 }
+                connection.end()
                 // if (isEmpty(results) || isEmptyObject(results)) return resolve([])
                 if (isObject(results)) return resolve([bean.fromObject(results as baseObject) as T])
                 if (isArray(results)) {
@@ -157,6 +159,7 @@ function baseCallback (connection: mysql.PoolConnection, sql: string, args?: any
                 reject(err)
                 return
             }
+            connection.end()
             if (!isNull(results.affectedRows)) {
                 resolve(results.affectedRows)
             } else {
