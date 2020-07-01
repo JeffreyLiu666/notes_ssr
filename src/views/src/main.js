@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-18 10:45:56
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-22 15:49:04
+ * @LastEditTime: 2020-06-30 18:26:26
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -10,6 +10,7 @@ import iView from 'view-design'
 import lView from 'l-view-vue'
 import { sync } from 'vuex-router-sync'
 import App from './App.vue'
+import FilterBlock from './components/Common/FilterBlock.vue'
 import { createRouter } from './router'
 import { createStore } from './store'
 
@@ -22,6 +23,8 @@ export function createApp () {
 
     Vue.use(iView)
     Vue.use(lView)
+
+    Vue.component('FilterBlock', FilterBlock)
 
     const app = new Vue({
         router,

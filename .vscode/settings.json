@@ -83,5 +83,8 @@
         "**/*.vue",
         "**/*.css",
         "**/*.less"
+    ],
+    "cSpell.words": [
+        "imgs"
     ]
 }

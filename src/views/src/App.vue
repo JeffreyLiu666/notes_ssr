@@ -26,6 +26,5 @@ export default {
 </script>
 
 <style lang="less">
-@import '~view-design/dist/styles/iview.css';
-@import '~l-view-vue/lib/style/index.css';
+@import '~@/style/index.less';
 </style>

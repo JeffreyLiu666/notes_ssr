@@ -34,3 +34,10 @@ export function delNote (params) {
         method: 'post'
     }, params)
 }
+
+export function changeResolve (params) {
+    return http.request({
+        url: '/Note/changeResolve',
+        method: 'post'
+    }, params)
+}

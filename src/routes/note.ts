@@ -6,7 +6,7 @@
  * @Description: des
  */
 import Router from 'koa-router'
-import { getList, updateNote, addNote, delNote } from '@/controller/note'
+import { getList, updateNote, addNote, delNote, changeResolve } from '@/controller/note'
 
 const router = new Router()
 
@@ -15,5 +15,6 @@ router
     .post('/editNote', updateNote)
     .post('/addNote', addNote)
     .post('/delNote', delNote)
+    .post('/changeResolve', changeResolve)
 
 export default router

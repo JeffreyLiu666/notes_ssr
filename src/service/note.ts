@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-23 14:47:43
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-23 17:09:17
+ * @LastEditTime: 2020-06-30 15:09:17
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -16,15 +16,68 @@ import { isEmpty } from "@/lib/check"
  * @param {number} limit
  * @return: Note[]
  */
-export async function queryList (user_id?: number, offset?: number, limit?: number): Promise<Note[]> {
+export async function doGetList (
+    {
+        user_id,
+        id,
+        title,
+        content,
+        isResolve,
+        offset,
+        limit
+    }: {
+        user_id?: number,
+        id?: number,
+        title?: string,
+        content?: string,
+        isResolve?: number,
+        offset?: number,
+        limit?: number
+    }
+): Promise<{
+    list: Note[],
+    total: number
+}> {
+    let where = ''
+
+    if (!isEmpty(user_id)) where += `user_id=${ user_id }`
+    if (!isEmpty(id)) where += ` ${ isEmpty(where) ? '' : 'and ' }id=${ id }`
+    if (!isEmpty(title)) where += ` ${ isEmpty(where) ? '' : 'and ' }title like '%${ title }%'`
+    if (!isEmpty(content)) where += ` ${ isEmpty(where) ? '' : 'and ' }content like '%${ content }%'`
+    if (!isEmpty(isResolve)) where += ` ${ isEmpty(where) ? '' : 'and ' }isResolve=${ isResolve }`
+
+    const list = await queryList(where,{ limit, offset })
+    const total = await queryListTotal(where)
+    return { list, total }
+}
+
+/**
+ * @description: 查询列表
+ * @param {number} user_id
+ * @param {number} offset
+ * @param {number} limit
+ * @return: Note[]
+ */
+export async function queryList (
+    where: string,
+    {
+        whereArgs,
+        offset,
+        limit
+    }: {
+        whereArgs?: any[],
+        offset?: number,
+        limit?: number
+    }
+): Promise<Note[]> {
     const db = DbHelper.getInstance()
     const result = await db.query(
         new Note(),
         {
-            where: 'user_id=?',
-            whereArgs: [user_id?.toString() || ''],
-            limit: limit,
-            offset: offset
+            where,
+            whereArgs,
+            limit,
+            offset
         }
     )
     return result
@@ -35,13 +88,13 @@ export async function queryList (user_id?: number, offset?: number, limit?: numb
  * @param {number} user_id
  * @return: number
  */
-export async function queryListTotal (user_id?: number): Promise<number> {
+export async function queryListTotal (where: string, whereArgs?: any[]): Promise<number> {
     const db = DbHelper.getInstance()
     let sql = `select count(*) from ${ Note.getTableName() }`
-    if (!isEmpty(user_id)) {
-        sql += ` where user_id=${ user_id }`
+    if (!isEmpty(where)) {
+        sql += ` where ${ where }`
     }
-    const result = await db.rawSql(sql)
+    const result = await db.rawSql(sql, whereArgs)
     return (result as any[])[0]['count(*)']
 }
 
@@ -75,5 +128,16 @@ export async function doAddNote (note: Note): Promise<number> {
 export async function doDeleteNote (note: Note): Promise<number> {
     const db = DbHelper.getInstance()
     const result = await db.delete(note, { where: 'id=? and user_id=?', whereArgs: [note.id, note.user_id] })
+    return result
+}
+
+/**
+ * @description: 修改已解决状态
+ * @param {Note} note
+ * @return: number
+ */
+export async function doChangeResolve (note: Note): Promise<number> {
+    const db = DbHelper.getInstance()
+    const result = await db.update(note, { where: 'id=? and user_id=?', whereArgs: [note.id, note.user_id] })
     return result
 }

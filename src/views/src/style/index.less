@@ -1,0 +1,126 @@
+@import './theme.less';
+
+.common-bg-red{
+    background: @red;
+}
+.common-bg-blue{
+    background: @blue;
+}
+.common-bg-orange{
+    background: @orange;
+}
+.common-bg-gray-dark{
+    background: @gray-dark;
+}
+.common-color-blue{
+    color: @blue
+}
+.common-color-white{
+    color: white;
+}
+.common-color-red{
+    color: @red;
+}
+.common-color-disabled{
+    color: @disabled-color;
+}
+.common-color-gray-dark{
+    color: @gray-dark;
+}
+.common-overspread{
+    width: 100%;
+    height: 100%;
+}
+.common-text-right{
+    text-align: right;
+}
+.common-text-left{
+    text-align: left;
+}
+.common-text-ellipsis{
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.common-text-ellipsis-2{
+    display: -webkit-box;
+    box-orient: vertical;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 2;
+}
+.common-text-bold{
+    font-weight: 600;
+}
+.common-form-list{
+    width: 100%;
+}
+.common-form-list-item{
+    width: 100%;
+    display: flex;
+    margin-bottom: 16px;
+}
+.common-form-list-label{
+    width: 120px;
+    flex-shrink: 0;
+    font-size: @font-size-base;
+    padding-top: 5px;
+    padding-right: 15px;
+    line-height: 22px;
+}
+.common-form-list-content{
+    flex: 1;
+    color: @black-light;
+}
+.common-form-list-text{
+    line-height: 22px;
+    padding: 5px 0;
+}
+.common-float-left{
+    float: left;
+}
+.common-float-right{
+    float: right;
+}
+.clearfix{
+    &::after{
+        content: '';
+        display: block;
+        clear: both;
+    }
+}
+
+@page-padding: 30px;
+.common-page-content{
+    // padding: 0 @page-padding;
+    margin: 0 @page-padding;
+    margin-bottom: 20px;
+}
+.common-header{
+    width: 100%;
+    margin-bottom: 20px;
+    box-shadow: @box-shadow-base;
+    padding: 0 @page-padding;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    .common-header-title{
+        font-size: 28px;
+        font-weight: bold;
+        color: @blue;
+        margin: 18px;
+        margin-left: 0;
+    }
+}
+
+.ivu-modal-wrap{
+    .ivu-modal{
+        margin-bottom: 100px;
+    }
+}
+
+.ivu-tooltip-inner{
+    white-space: normal;
+}

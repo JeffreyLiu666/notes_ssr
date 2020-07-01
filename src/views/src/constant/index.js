@@ -1,7 +1,7 @@
 /*
  * @Date: 2019-10-08 11:14:41
  * @Author: junfeng.liu
- * @LastEditTime: 2020-03-12 12:33:51
+ * @LastEditTime: 2020-06-29 17:56:03
  * @LastEditors: junfeng.liu
  * @Description: 枚举
  */
@@ -11,8 +11,6 @@ export const regExp = regObj
 
 /**
  * @description: 身份证对应省代码
- * @param {type} 
- * @return: 
  */
 export const IDPROVINCECODE = {
     11: '北京',
@@ -53,110 +51,9 @@ export const IDPROVINCECODE = {
 }
 
 /**
- * @description: 订单状态
- * @param {type} 
- * @return: 
+ * @description: 是否
  */
-export const ORDERSTATUSMAP = [
-    {label: '全部', value: ''},
-    {label: '已预订', value: '1'},
-    {label: '已入住', value: '2'},
-    {label: '已完成', value: '3'},
-    {label: '已取消', value: '0'}
-]
-
-/**
- * @description: 订单状态
- * @param {type} 
- * @return: 
- */
-export const ORDERSTATUS = {
-    0: '已取消',
-    1: '已预订',
-    2: '已入住',
-    3: '已退房'
-}
-
-/**
- * @description: 订单状态2
- * @param {type} 
- * @return: 
- */
-export const ORDERSTATUS2 = {
-    0: '已取消',
-    1: '已预订',
-    2: '已入住',
-    3: '已完成'
-}
-
-/**
- * @description: 订单状态颜色
- * @param {type} 
- * @return: 
- */
-export const ORDERSTATUSCOLOR = {
-    0: 'default',
-    1: 'warning',
-    2: 'primary',
-    3: 'default'
-}
-
-/**
- * @description: 房间状态
- * @param {type} 
- * @return: 
- */
-export const ROOMSTATUS = {
-    0: '已取消',
-    2: '已预订',
-    3: '维修',
-    4: '停用',
-    5: '保留',
-    21: '已入住',
-    22: '已退房',
-    30: '未上架'
-}
-
-/**
- * @description: 入住类型
- * @param {type} 
- * @return: 
- */
-export const BOOKTYPEMAP = [
-    {label: '正常入住', value: 1},
-    {label: '自用房', value: 2},
-    {label: '免费房', value: 3}
-]
-
-/**
- * @description: 入住类型
- * @param {type} 
- * @return: 
- */
-export const BOOKTYPE = {
-    1: '正常入住',
-    2: '自用房',
-    3: '免费房'
-}
-
-/**
- * @description: 接入类型
- * @param {type} 
- * @return: 
- */
-export const ORIGINTYPE = {
-    1: '民宿自营',
-    2: '代理商',
-    3: 'OTA'
-}
-
-/**
- * @description: 接入类型
- * @param {type} 
- * @return: 
- */
-export const ORIGINTYPEMAP = [
-    {label: '民宿自营', value: 1},
-    {label: '代理商', value: 2},
-    {label: 'OTA', value: 3}
+export const IS_NOT = [
+    { label: '是', value: 1 },
+    { label: '否', value: 0 }
 ]

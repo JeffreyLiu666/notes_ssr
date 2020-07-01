@@ -7,5 +7,6 @@
  */
 export default {
     defaultPort: 8080,
-    jwtSecret: 'test12345'
+    jwtSecret: 'test12345',
+    uploadImgDir: '/upload/image'
 }

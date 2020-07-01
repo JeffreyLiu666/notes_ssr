@@ -1,12 +1,16 @@
 <!--
  * @Date: 2020-06-18 16:18:22
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-24 17:50:22
+ * @LastEditTime: 2020-06-30 17:17:28
  * @LastEditors: junfeng.liu
  * @Description: des
 -->
 <template>
     <div>
+        <FilterBlock>
+            <LForm v-model="data" inline :config="config"></LForm>
+            <LButton type="cool-hover" @click="handleClick({ action: 'add' })">添加笔记</LButton>
+        </FilterBlock>
         <LTable
             stripe
             :height="list.length ? '' : 300"
@@ -18,22 +22,17 @@
             @on-page-change="getList">
         </LTable>
         <EditNote v-model="editNote.show" :isEdit="editNote.isEdit" :info="editNote.info" @success="getList"></EditNote>
-        <LButton type="cool-hover" @click="handleClick({ action: 'add' })">添加笔记</LButton>
     </div>
 </template>
 
 <script>
-// import homeModule from '@/store/modules/home'
-import { getList, delNote } from '@/api/note.js'
 import EditNote from '@/components/EditNote.vue'
+import { getList, delNote, changeResolve } from '@/api/note.js'
+import { IS_NOT } from '@/constant'
 
 export default {
     name: 'home',
     components: { EditNote },
-    // asyncData ({ store }) {
-    //     store.registerModule('home', homeModule)
-    //     return store.dispatch('home/getNoteList')
-    // },
     data () {
         return {
             list: [],
@@ -44,12 +43,25 @@ export default {
             },
             columns: [
                 { title: '#', type: 'index', width: 60 },
-                { title: 'ID', key: 'id', minWidth: 80 },
-                { title: '主题', key: 'title', minWidth: 180 },
-                { title: '详细内容', key: 'content', minWidth: 180 },
+                { title: 'ID', key: 'id', width: 80 },
+                { title: '主题', key: 'title', minWidth: 180, ellipsis: true },
+                { title: '详细内容', key: 'content', minWidth: 180, ellipsis: true },
+                { title: '是否解决', key: 'isResolve', width: 100, render: (h, { row, index }) => {
+                    return (
+                        <i-switch value={ row.isResolve } beforeChange={ () => {
+                            const isResolve = !row.isResolve
+                            return changeResolve({ id: row.id, isResolve }).then(() => {
+                                // 顺序上可能有冲突，导致不正确的状态，使用异步解决
+                                this.$nextTick(() => {
+                                    this.$set(this.list[index], 'isResolve', isResolve)
+                                })
+                            })
+                        } } />
+                    )
+                } },
                 { title: '创建时间', key: 'create_time', minWidth: 200 },
                 { title: '更新时间', key: 'update_time', minWidth: 200 },
-                { title: '操作', minWidth: 220, links: [
+                { title: '操作', minWidth: 120, links: [
                     { label: '编辑', action: 'edit' },
                     { label: '删除', action: 'del' }
                 ], onClick: this.handleClick }
@@ -58,16 +70,28 @@ export default {
                 show: false,
                 isEdit: false,
                 info: {}
-            }
+            },
+            data: {},
+            config: [
+                { label: 'ID', key: 'id', type: 'input', placeholder: '请输入ID' },
+                { label: '主题', key: 'title', type: 'input', placeholder: '请输入主题' },
+                { label: '内容', key: 'content', type: 'input', placeholder: '请输入内容' },
+                { label: '是否解决', key: 'isResolve', type: 'select', placeholder: '请选择', list: IS_NOT },
+                { label: ' ', type: 'buttons', contentWidth: 'auto', labelWidth: 20, config:
+                    {
+                        buttons: [
+                            { text: '搜索', icon: 'ios-search', type: 'primary', action: 'search' },
+                            { text: '重置', icon: 'md-refresh', type: 'error', action: 'reset' }
+                        ],
+                        onClick: this.handleClick
+                    }
+                }
+            ]
         }
     },
     computed: {
-        // initNotes () {
-        //     return this.$store.state.home.initList
-        // }
     },
     mounted () {
-        // this.list = this.initNotes
         this.getList()
     },
     methods: {
@@ -89,7 +113,16 @@ export default {
                         onOk: () => { this.del(info.row.id) }
                     })
                     break
+                case 'search':
+                    this.getList()
+                    break
+                case 'reset':
+                    this.reset()
+                    break
             }
+        },
+        reset () {
+            this.data = {}
         },
         del (id) {
             delNote({ id }).then(() => {
@@ -100,6 +133,10 @@ export default {
         getList (cur = 1) {
             this.pages.current = cur
             const params = {
+                id: this.data.id,
+                title: this.data.title,
+                content: this.data.content,
+                isResolve: this.data.isResolve,
                 page: cur,
                 limit: this.pages.size
             }

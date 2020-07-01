@@ -1,7 +1,7 @@
 <!--
  * @Date: 2020-06-24 11:35:57
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-24 16:20:11
+ * @LastEditTime: 2020-06-30 17:51:11
  * @LastEditors: junfeng.liu
  * @Description: des
 -->
@@ -26,6 +26,8 @@
 import ModalMixin from '@/components/ModalMixin.js'
 import { editNote, addNote } from '@/api/note'
 import { isEmpty } from '@/lib/check'
+import { reqStatusCheck } from '@/lib/request'
+import { getCookieParams } from '@/lib/util'
 
 export default {
     name: 'edit-note',
@@ -44,11 +46,11 @@ export default {
     },
     data () {
         return {
-            data: {},
+            data: { content: '' },
             config: [
                 { label: '标题', key: 'title', type: 'input', placeholder: '请输入标题' },
                 { label: '内容', key: 'content', type: 'input', placeholder: '请输入内容', maxlength: 200, config:
-                    { type: 'textarea', autosize: { minRows: 5 }, showWordLimit: true }
+                    { type: 'textarea', autosize: { minRows: 5, maxRows: 5 }, showWordLimit: true }
                 }
             ]
         }
@@ -58,9 +60,25 @@ export default {
             return this.isEdit ? '编辑' : '添加'
         }
     },
-    mounted () {},
+    mounted () {
+    },
     methods: {
         init () {
+            this.config.push({
+                label: '图片', key: 'imgs', type: 'upload', config:
+                    {
+                        maxlength: 3,
+                        type: {
+                            type: 'nameAndPath'
+                        },
+                        headers: {
+                            authorization: 'Bearer ' + getCookieParams().token
+                        },
+                        format: ['png', 'jpg'],
+                        maxSize: 2 * 1024,
+                        checkReqFn: reqStatusCheck
+                    }
+            })
             if (!this.isEdit) return
             this.data = Object.assign({}, this.info)
         },
@@ -72,7 +90,8 @@ export default {
             if (isEmpty(this.data.title)) return this.$Message.error('标题不能为空')
             let params = {
                 title: this.data.title,
-                content: this.data.content
+                content: this.data.content,
+                imgs: this.data.imgs
             }
             if (this.isEdit) {
                 params.id = this.info.id

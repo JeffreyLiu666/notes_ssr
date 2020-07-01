@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-16 14:20:23
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-24 17:48:51
+ * @LastEditTime: 2020-06-30 10:27:02
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -37,7 +37,7 @@ export default class DbHelper {
         })
     }
 
-    async rawSql (sql: string, args?: Array<string>): Promise<unknown> {
+    async rawSql (sql: string, args?: any[]): Promise<unknown> {
         const connection = await this.getConnection()
         return new Promise((resolve, reject) => {
             connection.query(sql, args, (err, results) => {
@@ -45,7 +45,7 @@ export default class DbHelper {
                     reject(err)
                     return
                 }
-                connection.end()
+                connection.release()
                 resolve(results)
             })
         })
@@ -78,7 +78,7 @@ export default class DbHelper {
                     reject(err)
                     return
                 }
-                connection.end()
+                connection.release()
                 // if (isEmpty(results) || isEmptyObject(results)) return resolve([])
                 if (isObject(results)) return resolve([bean.fromObject(results as baseObject) as T])
                 if (isArray(results)) {
@@ -159,7 +159,7 @@ function baseCallback (connection: mysql.PoolConnection, sql: string, args?: any
                 reject(err)
                 return
             }
-            connection.end()
+            connection.release()
             if (!isNull(results.affectedRows)) {
                 resolve(results.affectedRows)
             } else {

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-12 14:51:00
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-24 17:27:39
+ * @LastEditTime: 2020-06-28 18:22:17
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -9,6 +9,7 @@ import Koa from 'koa'
 import KoaBodyParser from 'koa-bodyparser'
 import KoaStatic from 'koa-static'
 import KoaJwt from 'koa-jwt'
+import KoaCors from 'koa2-cors'
 import path from 'path'
 import Log, { Level } from './lib/log'
 import router from '@/routes'
@@ -37,8 +38,11 @@ export default async function createApp (): Promise<Koa> {
         logError(err)
     })
 
+    // 跨域
+    app.use(KoaCors())
+
     // 静态资源
-    // app.use(KoaStatic(path.join(__dirname, '../public')))
+    app.use(KoaStatic(path.join(__dirname, '../public')))
     app.use(KoaStatic(path.join(__dirname, 'views/dist')))
 
     // 处理错误
@@ -69,7 +73,10 @@ export default async function createApp (): Promise<Koa> {
             }
             logError(err)
             if (err.code === 404) throw new CustomError({ status: 404, message: '您访问的路径不正确' })
-            else throw new CustomError({ message: err.message })
+            else {
+                ctx.set('Content-Type', 'application/json')
+                ctx.body = Result.fail({ message: err.message })
+            }
         })
     })
 
