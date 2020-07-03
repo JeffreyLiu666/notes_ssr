@@ -5,7 +5,9 @@
  * @LastEditors: junfeng.liu
  * @Description: des
  */
-export default {
+import { PoolConfig } from 'mysql'
+
+const config: PoolConfig = {
     host: 'localhost',
     port: 3306,
     user: 'root',
@@ -13,3 +15,5 @@ export default {
     database: 'notes_srr',
     connectTimeout: 60000
 }
+
+export default config

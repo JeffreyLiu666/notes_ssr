@@ -1,21 +1,22 @@
 /*
  * @Date: 2020-06-17 16:16:45
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-22 17:23:01
+ * @LastEditTime: 2020-07-03 10:39:50
  * @LastEditors: junfeng.liu
  * @Description: des
  */
-import jwt from 'jsonwebtoken'
 import { Context } from 'koa'
-import { Result } from '@/lib/result'
+import { Result, ResultError } from '@/lib/result'
 import { doLogin, doGetUsers } from '@/service/user'
-import config from '@/config/server'
+import Token from '@/model/Token'
+import { isEmpty } from '@/lib/check'
 
 export async function login (ctx: Context): Promise<void> {
     const { username, password } = ctx.request.body
     const user = await doLogin(username, password)
-    const payload = { username: user.username, id: user.id }
-    const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '2h' })
+    if (isEmpty(user.id)) throw new ResultError({ message: '账户异常' })
+    const payload = { username: user.username, user_id: (user.id) }
+    const token = await Token.getToken(payload)
     ctx.body = Result.success({ token })
 }
 

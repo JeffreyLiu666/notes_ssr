@@ -1,14 +1,14 @@
 /*
  * @Date: 2020-06-16 15:03:57
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-30 15:15:42
+ * @LastEditTime: 2020-07-02 17:19:40
  * @LastEditors: junfeng.liu
  * @Description: des
  */
 export const objectToString = Object.prototype.toString
 
-export const isEmpty = (val: unknown): boolean => isNull(val) || (val as any).toString() === ''
-export const isNull = (val: unknown): boolean => val === null || val === undefined
+export const isEmpty = (val: unknown): val is null | undefined | '' => isNull(val) || (val as any).toString() === ''
+export const isNull = (val: unknown): val is null | undefined => val === null || val === undefined
 export const isEmptyObject = (val: unknown): boolean =>
     isObject(val) && !Object.keys(val).length
 

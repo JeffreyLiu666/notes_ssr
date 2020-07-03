@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-23 14:47:43
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-30 15:09:17
+ * @LastEditTime: 2020-07-01 16:09:37
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -46,7 +46,7 @@ export async function doGetList (
     if (!isEmpty(content)) where += ` ${ isEmpty(where) ? '' : 'and ' }content like '%${ content }%'`
     if (!isEmpty(isResolve)) where += ` ${ isEmpty(where) ? '' : 'and ' }isResolve=${ isResolve }`
 
-    const list = await queryList(where,{ limit, offset })
+    const list = await queryList(where,{ limit, offset, orderBy: 'create_time desc' })
     const total = await queryListTotal(where)
     return { list, total }
 }
@@ -63,11 +63,13 @@ export async function queryList (
     {
         whereArgs,
         offset,
-        limit
+        limit,
+        orderBy
     }: {
         whereArgs?: any[],
         offset?: number,
-        limit?: number
+        limit?: number,
+        orderBy?: string
     }
 ): Promise<Note[]> {
     const db = DbHelper.getInstance()
@@ -77,7 +79,8 @@ export async function queryList (
             where,
             whereArgs,
             limit,
-            offset
+            offset,
+            orderBy
         }
     )
     return result

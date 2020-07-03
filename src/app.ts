@@ -1,30 +1,39 @@
 /*
  * @Date: 2020-06-12 14:51:00
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-28 18:22:17
+ * @LastEditTime: 2020-07-03 10:23:03
  * @LastEditors: junfeng.liu
  * @Description: des
  */
-import Koa from 'koa'
+import Koa, { Context } from 'koa'
 import KoaBodyParser from 'koa-bodyparser'
 import KoaStatic from 'koa-static'
-import KoaJwt from 'koa-jwt'
+// import KoaJwt from 'koa-jwt'
 import KoaCors from 'koa2-cors'
 import path from 'path'
 import Log, { Level } from './lib/log'
 import router from '@/routes'
-import config from './config/server'
+// import config from './config/server'
 import { Result, CustomError, ResultError } from './lib/result'
 import { ResultCode } from './constant'
 import initDev from './views/build/dev.js'
 import { isEmpty } from './lib/check'
+import Token from './model/Token'
 
 const isDev = process.env.NODE_ENV === 'development'
 
 console.log(isDev)
 const whiteUrls = [
-    '/Public/Login'
+    '/Public/Login',
+    '/favicon.ico'
 ]
+
+function unless (ctx: Context): boolean {
+    const regs = [/\/Login$/, /\/Public/]
+    const url = ctx.url
+    if (whiteUrls.includes(url)) return true
+    return regs.some((reg) => reg.test(url))
+}
 
 export default async function createApp (): Promise<Koa> {
     const app = new Koa()
@@ -47,18 +56,6 @@ export default async function createApp (): Promise<Koa> {
 
     // 处理错误
     app.use(async (ctx, next) => {
-        const url = ctx.url
-        if (
-            url === '/'
-            || url === '/Public'
-            || (
-                !whiteUrls.includes(url)
-                && url.includes('/Public')
-                && isEmpty(ctx.cookies.get('token'))
-            )
-        ) {
-            ctx.redirect('/Public/Login')
-        }
         return next().catch((err) => {
             if (err.status === 401) {
                 ctx.body = Result.fail({ code: ResultCode.TOKEN_EXPIRE })
@@ -66,7 +63,7 @@ export default async function createApp (): Promise<Koa> {
             }
             // 如果是ResultError则直接返回其message
             if (err instanceof ResultError) {
-                logError(err.message)
+                logError(err)
                 ctx.set('Content-Type', 'application/json')
                 ctx.body = err.message
                 return
@@ -80,16 +77,36 @@ export default async function createApp (): Promise<Koa> {
         })
     })
 
-    // jwt校验
-    app.use(KoaJwt({ secret: config.jwtSecret }).unless({
-        // path: [/\/Login$/, /\/Public/]
-        custom (ctx): boolean {
-            const regs = [/\/Login$/, /\/Public/]
-            const url = ctx.url
-            if (whiteUrls.includes(url)) return true
-            return regs.some((reg) => reg.test(url))
+    // 处理token
+    app.use(async (ctx, next) => {
+        const url = ctx.url
+        // 对空路由或cookies没有token的重定向到登录页
+        if (
+            url === '/'
+            || url === '/Public'
+            || (
+                !whiteUrls.includes(url)
+                && url.includes('/Public')
+                && isEmpty(ctx.cookies.get('token'))
+            )
+        ) {
+            ctx.redirect('/Public/Login')
         }
-    }))
+        if (unless(ctx)) return next()
+        await Token.checkJwtToken(ctx)
+        return next()
+    })
+
+    // jwt校验
+    // app.use(KoaJwt({ secret: config.jwtSecret }).unless({
+    //     // path: [/\/Login$/, /\/Public/]
+    //     custom (ctx): boolean {
+    //         const regs = [/\/Login$/, /\/Public/]
+    //         const url = ctx.url
+    //         if (whiteUrls.includes(url)) return true
+    //         return regs.some((reg) => reg.test(url))
+    //     }
+    // }))
 
     // 解析post请求
     app.use(KoaBodyParser())

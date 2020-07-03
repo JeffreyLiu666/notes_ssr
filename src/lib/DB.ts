@@ -1,11 +1,11 @@
 /*
  * @Date: 2020-06-16 14:20:23
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-30 10:27:02
+ * @LastEditTime: 2020-07-02 17:24:05
  * @LastEditors: junfeng.liu
  * @Description: des
  */
-import mysql, { Pool, PoolConfig, PoolConnection } from 'mysql'
+import mysql, { Pool, PoolConnection } from 'mysql'
 import config from '@/config/mysql'
 import { isEmpty, isObject, isArray, isNull } from '@/lib/check'
 // import { getValueString } from '@/lib/util'
@@ -15,7 +15,7 @@ export default class DbHelper {
     private _pool: Pool
 
     constructor () {
-        this._pool = mysql.createPool(config as PoolConfig)
+        this._pool = mysql.createPool(config)
     }
 
     static dbHelper: DbHelper
@@ -64,7 +64,7 @@ export default class DbHelper {
         }: db.queryParams = {}
     ): Promise<Array<T>> {
         const connection = await this.getConnection()
-        const cols = isEmpty(columns) ? '*' : (columns as Array<string>).toString()
+        const cols = isEmpty(columns) ? '*' : columns.toString()
         let sql = `select ${ cols } from ${ bean.getTableName() }`
         if (!isEmpty(where)) sql += ` where ${where}`
         if (!isEmpty(groupBy)) sql += ` group by ${groupBy}`
@@ -80,7 +80,7 @@ export default class DbHelper {
                 }
                 connection.release()
                 // if (isEmpty(results) || isEmptyObject(results)) return resolve([])
-                if (isObject(results)) return resolve([bean.fromObject(results as baseObject) as T])
+                if (isObject(results)) return resolve([bean.fromObject(results) as T])
                 if (isArray(results)) {
                     return resolve(results.map((item: baseObject) => (bean.fromObject(item) as T)))
                 }

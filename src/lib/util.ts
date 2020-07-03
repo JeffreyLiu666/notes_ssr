@@ -1,15 +1,11 @@
 /*
  * @Date: 2020-06-17 10:18:32
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-24 15:56:48
+ * @LastEditTime: 2020-07-02 14:45:39
  * @LastEditors: junfeng.liu
  * @Description: des
  */
-import jwt from 'jsonwebtoken'
-import { isNull, isString, isEmpty } from './check'
-import { ResultError } from './result'
-import { ResultCode } from '@/constant'
-import { Context } from 'koa'
+import { isNull, isString } from './check'
 
 /**
  * @description: 主要用于数据库object转values的内容
@@ -35,19 +31,4 @@ export function getValueString (val: unknown): string {
     if (isString(val)) return `'${val}'`
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (val as any).toString()
-}
-
-/**
- * @description: 从token中获取user_id，如果user_id为空则直接抛错
- * @param {Context} ctx
- * @return: user_id
- */
-export function getUserIdByContext (ctx: Context): number {
-    const token = ctx.req.headers.authorization?.replace('Bearer ', '') || ''
-    const userInfo = jwt.decode(token)
-    const user_id = (userInfo as baseObject)?.id
-    if (isEmpty(user_id)) {
-        throw new ResultError({ code: ResultCode.LOGIN_FAIL })
-    }
-    return user_id as number
 }
