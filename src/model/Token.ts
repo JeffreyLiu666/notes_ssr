@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-07-02 15:37:33
  * @Author: junfeng.liu
- * @LastEditTime: 2020-07-03 10:54:00
+ * @LastEditTime: 2020-07-04 18:24:00
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -165,8 +165,9 @@ export default class Token extends BaseModel {
      * @return: user_id
      */
     static async getJwtTokenByContext (ctx: Context): Promise<string> {
-        const token = ctx.req.headers.authorization?.replace('Bearer ', '') || ''
-        if (isEmpty(token)) throw new ResultError({ code: ResultCode.TOKEN_EXPIRE })
+        let token = ctx.req.headers.authorization
+        if (isEmpty(token) || !token.includes('Bearer')) throw new ResultError({ code: ResultCode.TOKEN_EXPIRE })
+        token = token.replace('Bearer ', '')
         const jwtToken = await Token.getJwtToken(token)
         if (isEmpty(jwtToken)) throw new ResultError({ code: ResultCode.TOKEN_EXPIRE })
         return jwtToken

@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-23 15:39:31
  * @Author: junfeng.liu
- * @LastEditTime: 2020-06-29 17:37:41
+ * @LastEditTime: 2020-07-03 18:09:26
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -96,5 +96,18 @@ export default class Note extends BaseModel {
                 break
         }
         return obj
+    }
+
+    toListItem (): baseObject {
+        return {
+            id: this.id || null,
+            user_id: this.user_id || null,
+            title: this.title || null,
+            content: this.content || null,
+            imgs: this.imgs || null,
+            isResolve: this.isResolve,
+            create_time: this.create_time,
+            update_time: this.update_time
+        }
     }
 }

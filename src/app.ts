@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-12 14:51:00
  * @Author: junfeng.liu
- * @LastEditTime: 2020-07-03 10:23:03
+ * @LastEditTime: 2020-07-03 16:47:16
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -25,7 +25,8 @@ const isDev = process.env.NODE_ENV === 'development'
 console.log(isDev)
 const whiteUrls = [
     '/Public/Login',
-    '/favicon.ico'
+    '/favicon.ico',
+    '/hello'
 ]
 
 function unless (ctx: Context): boolean {

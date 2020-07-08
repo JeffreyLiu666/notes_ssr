@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-06-23 14:47:03
  * @Author: junfeng.liu
- * @LastEditTime: 2020-07-03 10:54:53
+ * @LastEditTime: 2020-07-04 18:18:19
  * @LastEditors: junfeng.liu
  * @Description: des
  */
@@ -30,7 +30,7 @@ export async function getList (ctx: Context): Promise<void> {
         offset: page && limit ? (page - 1) * limit : undefined,
         limit
     })
-    ctx.body = Result.queryList(result.list, result.total, page, limit)
+    ctx.body = Result.queryList(result.list.map(item => item.toListItem()), result.total, page, limit)
 }
 
 export async function updateNote (ctx: Context): Promise<void> {
